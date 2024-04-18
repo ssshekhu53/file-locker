@@ -62,7 +62,7 @@ func (h *handler) Help(_ *gofr.Context) (interface{}, error) {
 	return `File Locker CLI Tool
 
 Usage:
-  folder-lock [command]
+  file-locker [command]
 
 Available Commands:
   init      Create a directory named private and initialize the file locker
