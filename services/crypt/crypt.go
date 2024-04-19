@@ -22,14 +22,13 @@ func New() (services.Crypt, error) {
 	return &crypt{block: block}, nil
 }
 
-// Encrypt method is to encrypt crypt
-func (c *crypt) Encrypt(creds []byte) []byte {
-	ciphertext := make([]byte, aes.BlockSize+len(creds))
+func (c *crypt) Encrypt(data []byte) []byte {
+	ciphertext := make([]byte, aes.BlockSize+len(data))
 	iv := ciphertext[:aes.BlockSize]
 
 	cfb := cipher.NewCFBEncrypter(c.block, iv)
-	cipherText := make([]byte, len(creds))
-	cfb.XORKeyStream(cipherText, creds)
+	cipherText := make([]byte, len(data))
+	cfb.XORKeyStream(cipherText, data)
 
 	dst := make([]byte, base64.StdEncoding.EncodedLen(len(cipherText)))
 
@@ -38,13 +37,13 @@ func (c *crypt) Encrypt(creds []byte) []byte {
 	return dst
 }
 
-func (c *crypt) Decrypt(cred string) ([]byte, error) {
-	ciphertext := make([]byte, aes.BlockSize+len(cred))
+func (c *crypt) Decrypt(data string) ([]byte, error) {
+	ciphertext := make([]byte, aes.BlockSize+len(data))
 
 	iv := ciphertext[:aes.BlockSize]
 	cfb := cipher.NewCFBDecrypter(c.block, iv)
 
-	cipherText, err := base64.StdEncoding.DecodeString(cred)
+	cipherText, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
 		return []byte{}, err
 	}
